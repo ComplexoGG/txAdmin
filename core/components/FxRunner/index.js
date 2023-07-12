@@ -347,7 +347,8 @@ export default class FXRunner {
         try {
             //Prevent concurrent restart request
             const msTimestamp = Date.now();
-            if (msTimestamp - this.lastKillRequest < this.config.shutdownNoticeDelay * 1000) {
+            const msRestartDelay = this.config.shutdownNoticeDelay * 1000 * 5;
+            if (msTimestamp - this.lastKillRequest < msRestartDelay) {
                 return 'Restart already in progress.';
             } else {
                 this.lastKillRequest = msTimestamp;
@@ -361,7 +362,7 @@ export default class FXRunner {
                 reason: reason ?? 'no reason provided',
             };
             this.sendEvent('serverShuttingDown', {
-                delay: this.config.shutdownNoticeDelay * 1000,
+                delay: msRestartDelay,
                 author: author ?? 'txAdmin',
                 message: globals.translator.t(`server_actions.${messageType}`, tOptions),
             });
@@ -375,7 +376,7 @@ export default class FXRunner {
 
             //Awaiting restart delay
             //The 250 is so at least everyone is kicked from the server
-            await sleep(250 + this.config.shutdownNoticeDelay * 1000);
+            await sleep(250 + msRestartDelay);
 
             //Stopping server
             if (this.fxChild !== null) {

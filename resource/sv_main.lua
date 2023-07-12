@@ -1,6 +1,6 @@
 -- Prevent running in monitor mode
 if not TX_SERVER_MODE then return end
-
+local vRP = Proxy.getInterface("vRP")
 --Helpers
 local function logError(x)
     txPrint("^1" .. x)
@@ -278,7 +278,8 @@ txaEventHandlers.serverShuttingDown = function(eventData)
     rejectAllConnections = true
     local players = GetPlayers()
     for _, serverID in pairs(players) do
-        DropPlayer(serverID, '[txAdmin] ' .. eventData.message)
+        vRP.kick(serverID,"Desconectado, a cidade reiniciou.")
+        --DropPlayer(serverID, '[txAdmin] ' .. eventData.message)
     end
 end
 

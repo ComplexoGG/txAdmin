@@ -83,13 +83,14 @@ CreateThread(function()
             end
         end --end for players
 
-
-        --Check if player disconnected
-        for playerID, playerData in pairs(TX_PLAYERLIST) do
-            if playerData.foundLastCheck == true then
-                playerData.foundLastCheck = false
-            else
-                TX_PLAYERLIST[playerID] = nil
+        if TX_PLAYERLIST then --Sometimes TX_PLAYERLIST is nil
+            --Check if player disconnected
+            for playerID, playerData in pairs(TX_PLAYERLIST) do
+                if playerData.foundLastCheck == true then
+                    playerData.foundLastCheck = false
+                else
+                    TX_PLAYERLIST[playerID] = nil
+                end
             end
         end
 

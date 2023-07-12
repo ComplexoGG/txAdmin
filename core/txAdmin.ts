@@ -6,7 +6,6 @@ import { txEnv } from '@core/globalData';
 
 import { printBanner } from '@core/extras/banner';
 import setupProfile from '@core/extras/setupProfile';
-import updateChecker from '@core/extras/updateChecker';
 
 import AdminVault from '@core/components/AdminVault';
 import ConfigVault from '@core/components/ConfigVault';

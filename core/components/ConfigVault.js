@@ -163,7 +163,7 @@ export default class ConfigVault {
                 onesync: toDefault(cfg.fxRunner.onesync, null),
                 autostart: toDefault(cfg.fxRunner.autostart, null),
                 restartDelay: toDefault(cfg.fxRunner.restartDelay, null), //not in template
-                shutdownNoticeDelay: toDefault(cfg.fxRunner.shutdownNoticeDelay, null), //not in template
+                shutdownNoticeDelay: toDefault(cfg.fxRunner.shutdownNoticeDelay, 5), //not in template
                 quiet: toDefault(cfg.fxRunner.quiet, null),
             };
 

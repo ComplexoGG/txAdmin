@@ -71,7 +71,7 @@ export default class UpdateChecker {
             const resp = await got(reqUrl).json()
             apiResponse = changelogRespSchema.parse(resp);
         } catch (error) {
-            console.verbose.warn(`Failed to retrieve FXServer/txAdmin update data with error: ${error.message}`);
+            console.verbose.warn(`Failed to retrieve FXServer/txAdmin update data with error: ${(<Error>error).message}`);
             return;
         }
 

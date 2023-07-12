@@ -1,5 +1,5 @@
 export default {
-    fxserverPath: 'E:\\FiveM\\6520\\fxserver.exe',
+    fxserverPath: 'C:\\Users\\lucas\\IdeaProjects\\cpxgg-source\\artifacts\\fxserver.exe',
     debouncerInterval: 250,
     preReleaseExpirationDays: 21,
     txAdminArgs: [
