@@ -1,6 +1,5 @@
 -- Prevent running in monitor mode
 if not TX_SERVER_MODE then return end
-local vRP = Proxy.getInterface("vRP")
 --Helpers
 local function logError(x)
     txPrint("^1" .. x)
@@ -24,7 +23,7 @@ TX_PLAYERLIST = {}
 TX_LUACOMHOST = GetConvar("txAdmin-luaComHost", "invalid")
 TX_LUACOMTOKEN = GetConvar("txAdmin-luaComToken", "invalid")
 TX_VERSION = GetResourceMetadata(GetCurrentResourceName(), 'version') -- for now, only used in the start print
-
+local DISCONNECT_MESSAGE <const> = "Desconectado, o servidor está reiniciando."
 -- Checking convars
 if TX_LUACOMHOST == "invalid" or TX_LUACOMTOKEN == "invalid" then
     txPrint('^1API Host or Pipe Token ConVars not found. Do not start this resource if not using txAdmin.')
@@ -102,16 +101,19 @@ end
 
 --- Kick all players
 local function txaKickAll(source, args)
+    GlobalState.rejectConnections = true
     if args[1] == nil then
         args[1] = 'no reason provided'
     else
         args[1] = unDeQuote(args[1])
     end
     txPrint("Kicking all players with reason: "..args[1])
-    for _, pid in pairs(GetPlayers()) do
-        DropPlayer(pid, "\n".."Kicked for: " .. args[1])
+    local players = GetPlayers()
+    for i = 1, #players do
+        DropPlayer(players[i], DISCONNECT_MESSAGE)
     end
     CancelEvent()
+    TriggerEvent("admin:KickAll")
 end
 
 
@@ -277,9 +279,8 @@ txaEventHandlers.serverShuttingDown = function(eventData)
     txPrint('Server shutdown imminent. Kicking all players.')
     rejectAllConnections = true
     local players = GetPlayers()
-    for _, serverID in pairs(players) do
-        vRP.kick(serverID,"Desconectado, a cidade reiniciou.")
-        --DropPlayer(serverID, '[txAdmin] ' .. eventData.message)
+    for i = 1, #players do
+        DropPlayer(players[i], DISCONNECT_MESSAGE)
     end
 end
 
