@@ -1,6 +1,7 @@
 const modulename = 'WebServer:FXServerCommands';
 import xssInstancer from '@core/extras/xss.js';
 import consoleFactory from '@extras/console';
+import { exec } from "child_process";
 const console = consoleFactory(modulename);
 const xss = xssInstancer();
 
@@ -26,7 +27,7 @@ export default async function FXServerCommands(ctx) {
     const parameter = ctx.request.body.parameter;
 
     //Ignore commands when the server is offline
-    if (globals.fxRunner.fxChild === null) {
+    if (globals.fxRunner.fxChild === null && action !== "git_sync") {
         return ctx.send({
             type: 'danger',
             message: '<b>Cannot execute this action with the server offline.</b>',
@@ -160,7 +161,21 @@ export default async function FXServerCommands(ctx) {
                 message: `<b>txAdminClient is not running!</b><br> <pre>${xss(toResp)}</pre>`,
             });
         }
-
+    } else if (action === "git_sync") {
+        if (!ensurePermission(ctx, 'commands.resources')) return false;
+        ctx.utils.logCommand("gitSync");
+        const pwsh = exec(`pwsh.exe -Command \"Set-Location '${globals.fxRunner.config.serverDataPath}'; & {& '${globals.fxRunner.config.serverDataPath}\\git_sync.ps1'}\"`)
+        pwsh.stdout.on("data", function(data){
+            console.log(data);
+        });
+        pwsh.stderr.on("data", function(data){
+            console.log(data);
+        });
+        pwsh.stdin.end(); //end input
+        return ctx.send({
+            type: 'success',
+            message: `<b>Doing sync, check System Logs!</b>`,
+        })
     //==============================================
     } else {
         ctx.utils.logCommand('Unknown action!');

@@ -220,6 +220,8 @@
                     <%= perms.controls %>>STOP</button>
                 <br />
 
+                <button onclick="controlCommand('git_sync')" class="btn btn-outline-dark btn-md mx-auto m-2"
+                    type="button" id="ctrl-announce" <%= perms.commandKick %>>Git Sync</button>
                 <button onclick="controlCommand('admin_broadcast')" class="btn btn-outline-dark btn-md mx-auto m-2"
                     type="button" id="ctrl-announce" <%= perms.commandMessage %>>Announcement</button>
                 <button onclick="controlCommand('kick_all')" class="btn btn-outline-dark btn-md mx-auto m-2"
@@ -385,7 +387,7 @@
                 $.notify({ message: 'This message is too short!'}, {type: 'danger'});
                 return;
             }
-        }else if(action == 'kick_all'){
+        }else if(action == 'kick_all') {
             message = await txAdminPrompt({
                 modalColor: 'red',
                 confirmBtnClass: 'btn-red',
@@ -393,6 +395,8 @@
                 description: 'Type the kick reason or leave it blank (press enter)',
                 required: false,
             });
+        }else if (action === 'git_sync') {
+            message = "";
         }else{
             return;
         }
