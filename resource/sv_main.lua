@@ -184,7 +184,6 @@ end
 -- =============================================
 --  Events handling
 -- =============================================
-local cvHideAnnouncement = GetConvarBool('txAdmin-hideDefaultAnnouncement')
 local cvHideDirectMessage = GetConvarBool('txAdmin-hideDefaultDirectMessage')
 local cvHideWarning = GetConvarBool('txAdmin-hideDefaultWarning')
 local cvHideScheduledRestartWarning = GetConvarBool('txAdmin-hideDefaultScheduledRestartWarning')
@@ -193,10 +192,7 @@ local txaEventHandlers = {}
 --- Handler for announcement events
 --- Broadcast admin message to all players
 txaEventHandlers.announcement = function(eventData)
-    if not cvHideAnnouncement then
-        TriggerClientEvent('txcl:showAnnouncement', -1, eventData.message, eventData.author)
-    end
-    TriggerEvent('txsv:logger:addChatMessage', 'tx', '(Broadcast) '..eventData.author, eventData.message)
+    TriggerClientEvent("Notify", -1, "amarelo", eventData.message .. "<br><br><b>Enviado por:</b> Governador", 60000)
 end
 
 
