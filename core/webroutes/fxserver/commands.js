@@ -167,9 +167,11 @@ export default async function FXServerCommands(ctx) {
         const pwsh = exec(`pwsh.exe -Command \"Set-Location '${globals.fxRunner.config.serverDataPath}'; & {& '${globals.fxRunner.config.serverDataPath}\\git_sync.ps1'}\"`)
         pwsh.stdout.on("data", function(data){
             console.log(data);
+            globals.webServer.webSocket.pushRefresh('systemconsole')
         });
         pwsh.stderr.on("data", function(data){
             console.log(data);
+            globals.webServer.webSocket.pushRefresh('systemconsole')
         });
         pwsh.stdin.end(); //end input
         return ctx.send({

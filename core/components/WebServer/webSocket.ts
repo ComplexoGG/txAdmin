@@ -6,6 +6,7 @@ import status from './wsRooms/status';
 import playerlist from './wsRooms/playerlist';
 import liveconsole from './wsRooms/liveconsole';
 import serverlog from './wsRooms/serverlog';
+import systemconsole from "./wsRooms/systemconsole";
 import TxAdmin from '@core/txAdmin';
 const console = consoleFactory(modulename);
 
@@ -25,7 +26,7 @@ export type RoomType = {
 }
 
 //NOTE: quen adding multiserver, create dynamic rooms like playerlist#<svname>
-const VALID_ROOMS = ['status', 'liveconsole', 'serverlog', 'playerlist'] as const;
+const VALID_ROOMS = ['status', 'liveconsole', 'serverlog', 'playerlist','systemconsole'] as const;
 type RoomNames = typeof VALID_ROOMS[number];
 
 //FIXME: move session definition to request authenticator
@@ -87,6 +88,7 @@ export default class WebSocket {
             playerlist: playerlist(txAdmin),
             liveconsole: liveconsole(txAdmin),
             serverlog: serverlog(txAdmin),
+            systemconsole: systemconsole(txAdmin),
         };
 
         setInterval(this.flushBuffers.bind(this), 250);

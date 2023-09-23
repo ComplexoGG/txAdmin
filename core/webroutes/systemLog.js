@@ -17,7 +17,7 @@ export default async function SystemLog(ctx) {
 
     return ctx.utils.render('main/systemLog', {
         headerTitle: 'System Log',
-        consoleLog: getLogBuffer(),
+        // consoleLog: getLogBuffer(),
         actionLog: xss(await globals.logger.admin.getRecentBuffer()),
     });
 };
