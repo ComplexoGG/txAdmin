@@ -65,8 +65,14 @@
                                         <%= resource.description %>
                                     <% } %>
                                 </td>
-
                                 <td class="tableActions">
+                                    <% if(resource.has_ui){ %>
+                                        <a class="btn btn-sm btn-outline-primary d-block d-md-inline-block mr-md-1 mb-1 mb-md-0 <%= disableActions %>"
+                                                href="#"
+                                                onclick="btnCommand('build_ui_res', '<%= resource.name %>'); event.preventDefault();" <%= disableActions %>>
+                                            Build UI
+                                        </a>
+                                    <% } %>
                                     <% if (resource.status === 'started') { %>
                                     <a class="btn btn-sm btn-outline-warning d-block d-md-inline-block mr-md-1 mb-1 mb-md-0 <%= disableActions %>"
                                         href="#"

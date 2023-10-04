@@ -137,6 +137,7 @@ local function txaReportResources(source, args)
             status = GetResourceState(resName),
             author = GetResourceMetadata(resName, 'author'),
             version = GetResourceMetadata(resName, 'version'),
+            has_ui = GetResourceMetadata(resName, 'ui_page') ~= nil,
             description = resDesc,
             path = GetResourcePath(resName)
         }

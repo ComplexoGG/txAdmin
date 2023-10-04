@@ -35,7 +35,7 @@ export default async function FXServerCommands(ctx) {
     }
 
     //Block starting/restarting the 'runcode' resource
-    const unsafeActions = ['restart_res', 'start_res', 'ensure_res'];
+    const unsafeActions = ['restart_res', 'start_res', 'ensure_res', 'build_ui_res'];
     if (unsafeActions.includes(action) && parameter.includes('runcode')) {
         return ctx.send({
             type: 'danger',
@@ -128,8 +128,21 @@ export default async function FXServerCommands(ctx) {
         ctx.utils.logCommand(cmd);
         let toResp = await globals.fxRunner.srvCmdBuffer(cmd);
         return sendAlertOutput(ctx, toResp);
-
-    //==============================================
+    } else if (action === "build_ui_res") {
+        if (!ensurePermission(ctx, 'commands.resources')) return false;
+        ctx.utils.logCommand("gitSync");
+        const pwsh = exec(`pwsh.exe -Command \"Set-Location '${globals.fxRunner.config.serverDataPath}'; & {& '${globals.fxRunner.config.serverDataPath}\\git_sync.ps1' -BUILD_ONCE ${parameter}}\"`)
+        pwsh.stdout.on("data", function (data) {
+            console.log(data);
+            globals.webServer.webSocket.pushRefresh('systemconsole')
+        });
+        pwsh.stderr.on("data", function (data) {
+            console.log(data);
+            globals.webServer.webSocket.pushRefresh('systemconsole')
+        });
+        pwsh.stdin.end();
+        return sendAlertOutput(ctx, 'Check your system console in a few seconds.');
+        //==============================================
     } else if (action == 'stop_res') {
         if (!ensurePermission(ctx, 'commands.resources')) return false;
         let cmd = formatCommand('stop', parameter);
