@@ -193,7 +193,7 @@ local txaEventHandlers = {}
 --- Handler for announcement events
 --- Broadcast admin message to all players
 txaEventHandlers.announcement = function(eventData)
-    TriggerClientEvent("Notify", -1, "amarelo", eventData.message .. "<br><br><b>Enviado por:</b> Governador.", 60000)
+    ExecuteCommand("announce "..eventData.message)
 end
 
 
